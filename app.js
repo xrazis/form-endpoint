@@ -1,8 +1,13 @@
 const express = require('express');
 const app = express();
+require('dns').lookup(require('os').hostname(), function (err, add, fam) {
+    console.log('addr: ' + add);
+})
 
 const port = 3000;
 const transporter = require('./connections/mailer_conn');
+const {emailSchema} = require("./schemas/joi");
+const {email_user} = require("./config/dev");
 
 app.get('/', (req, res) => {
     const githubRepo = 'https://github.com/xrazis/form-endpoint';
@@ -10,18 +15,29 @@ app.get('/', (req, res) => {
 });
 
 app.post('/send-email', async (req, res) => {
-    console.debug(req);
+    console.debug(req.ip);
 
     try {
-        const {firstName, lastName, email, phoneNumber, message} = req.body;
-        await emailSchema.validateAsync({firstName, lastName, email, phoneNumber, message});
+        //Only allow local apps
+        // if (req.ip !== 1) {
+        //     throw new Error('The referrer IP does not match the servers IP!');
+        // }
 
-        //TODO Super complex logic to filter spam etc
+        const {name, userEmail, message, fakeField, serverEmail} = req.body;
+
+        //Check if a fake field is filled - naive bot detection :)
+        if (fakeField !== null) {
+            throw new Error('Bot detected!');
+        }
+
+        //Validate against our schema
+        await emailSchema.validateAsync({name, userEmail, message});
 
         const mail = {
-            from: email,
-            to: email_user,
-            subject: `Source ENTER-HOST - inquiry from: ${lastName} ${firstName} ${phoneNumber}`,
+            from: email_user,
+            replyTo: userEmail,
+            to: serverEmail,
+            subject: `Source {ENTER_HOST} - inquiry from: ${name}`,
             text: message
         };
 
