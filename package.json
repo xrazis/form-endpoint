@@ -1,0 +1,15 @@
+{
+  "name": "form-endpoint",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "NODE_ENV=production node app.js",
+    "dev": "NODE_ENV=development nodemon app.js"
+  },
+  "dependencies": {
+    "express": "^5.0.0-beta.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.14"
+  }
+}
