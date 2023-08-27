@@ -1,19 +1,19 @@
 const express = require('express');
-const RateLimit = require('express-rate-limit');
+const rateLimit = require('express-rate-limit')
 const cors = require('cors');
-const app = express();
 
 const port = 3000;
 const transporter = require('./connections/mailer_conn');
 const {emailSchema} = require("./schemas/joi");
 const {email_user} = require("./config/dev");
 
-//Replace origin with allowed domain
 const corsOptions = {
     origin: ['http://localhost:3000', 'https://antamacollective.gr'],
 }
 
-app.use(new RateLimit({
+const app = express();
+
+app.use(rateLimit({
     windowMs: 60 * 1000,
     max: 10
 }));
