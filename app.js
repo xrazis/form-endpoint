@@ -1,5 +1,6 @@
-const cors = require('cors');
 const express = require('express');
+const RateLimit = require('express-rate-limit');
+const cors = require('cors');
 const app = express();
 
 const port = 3000;
@@ -9,8 +10,13 @@ const {email_user} = require("./config/dev");
 
 //Replace origin with allowed domain
 const corsOptions = {
-    origin: 'https://antamacollective.gr',
+    origin: ['http://localhost:3000', 'https://antamacollective.gr'],
 }
+
+app.use(new RateLimit({
+    windowMs: 60 * 1000,
+    max: 10
+}));
 
 app.get('/', (req, res) => {
     const githubRepo = 'https://github.com/xrazis/form-endpoint';
@@ -39,13 +45,13 @@ app.post('/send-email', cors(corsOptions), async (req, res) => {
 
         transporter.sendMail(mail, err => {
             if (err) {
-                res.status(500).send('not okeik with 500!');
+                res.status(500).send(err);
             } else {
-                res.status(200).send('okeik with 200!');
+                res.status(200).send('Email sent!');
             }
         });
     } catch (err) {
-        res.status(400).send('not okeik with 400!');
+        res.status(400).send(err);
     }
 });
 
