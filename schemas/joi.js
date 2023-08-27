@@ -1,5 +1,5 @@
 const Joi = require('joi');
-
+//TODO Fix schema
 const emailSchema = Joi.object({
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),

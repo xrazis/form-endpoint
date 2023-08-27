@@ -11,15 +11,12 @@ app.get('/', (req, res) => {
     res.send(`<b>form-endpoint</b> handles forms for SSG. Learn more on <a href="${githubRepo}">github.com/xrazis/form-endpoint</a>.`);
 });
 
+//TODO Add cors - only allow specific domains
+
 app.post('/send-email', async (req, res) => {
     console.debug(req.ip);
 
     try {
-        //Only allow local apps
-        // if (req.ip !== 1) {
-        //     throw new Error('The referrer IP does not match the servers IP!');
-        // }
-
         const {name, userEmail, message, fakeField, serverEmail} = req.body;
 
         //Check if a fake field is filled - naive bot detection :)
