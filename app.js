@@ -1,8 +1,5 @@
 const express = require('express');
 const app = express();
-require('dns').lookup(require('os').hostname(), function (err, add, fam) {
-    console.log('addr: ' + add);
-})
 
 const port = 3000;
 const transporter = require('./connections/mailer_conn');
