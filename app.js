@@ -1,3 +1,4 @@
+const cors = require('cors');
 const express = require('express');
 const app = express();
 
@@ -6,16 +7,17 @@ const transporter = require('./connections/mailer_conn');
 const {emailSchema} = require("./schemas/joi");
 const {email_user} = require("./config/dev");
 
+//Replace origin with allowed domain
+const corsOptions = {
+    origin: 'https://antamacollective.gr',
+}
+
 app.get('/', (req, res) => {
     const githubRepo = 'https://github.com/xrazis/form-endpoint';
     res.send(`<b>form-endpoint</b> handles forms for SSG. Learn more on <a href="${githubRepo}">github.com/xrazis/form-endpoint</a>.`);
 });
 
-//TODO Add cors - only allow specific domains
-
-app.post('/send-email', async (req, res) => {
-    console.debug(req.ip);
-
+app.post('/send-email', cors(corsOptions), async (req, res) => {
     try {
         const {name, userEmail, message, fakeField, serverEmail} = req.body;
 
