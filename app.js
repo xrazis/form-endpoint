@@ -1,6 +1,7 @@
 const express = require('express');
 const rateLimit = require('express-rate-limit')
 const cors = require('cors');
+const multer = require('multer');
 
 const port = 3000;
 const transporter = require('./connections/mailer_conn');
@@ -8,7 +9,7 @@ const {emailSchema} = require("./schemas/joi");
 const {email_user} = require("./config/dev");
 
 const corsOptions = {
-    origin: ['http://localhost:3000', 'http://localhost:1313', 'https://antamacollective.gr'],
+    origin: ['https://antamacollective.gr'],
 }
 
 const app = express();
@@ -23,22 +24,22 @@ app.get('/', (req, res) => {
     res.send(`<b>form-endpoint</b> handles forms for SSG. Learn more on <a href="${githubRepo}">github.com/xrazis/form-endpoint</a>.`);
 });
 
-app.post('/send-email', cors(corsOptions), async (req, res) => {
+app.post('/send-email', cors(corsOptions), multer().none(), async (req, res) => {
     try {
-        const {name, userEmail, message, fakeField, serverEmail} = req.body;
+        const {name, email, message, fakeField, serverEmail} = req.body;
         const host = req.hostname;
 
         //Check if a fake field is filled - naive bot detection :)
-        if (fakeField !== null) {
+        if (fakeField !== undefined) {
             throw new Error('Bot detected!');
         }
 
         //Validate against our schema
-        await emailSchema.validateAsync({name, userEmail, message});
+        await emailSchema.validateAsync({name, email, message});
 
         const mail = {
             from: email_user,
-            replyTo: userEmail,
+            replyTo: email,
             to: serverEmail,
             subject: `Email from ${host} - inquiry from: ${name}`,
             text: message

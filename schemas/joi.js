@@ -2,7 +2,7 @@ const Joi = require('joi');
 
 const emailSchema = Joi.object({
     name: Joi.string().required(),
-    userEmail: Joi.string().email().required(),
+    email: Joi.string().email().required(),
     message: Joi.string(),
 });
 
