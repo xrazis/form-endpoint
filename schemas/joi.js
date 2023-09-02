@@ -1,10 +1,8 @@
 const Joi = require('joi');
-//TODO Fix schema
+
 const emailSchema = Joi.object({
-    firstName: Joi.string().required(),
-    lastName: Joi.string().required(),
-    email: Joi.string().email().required(),
-    phoneNumber: Joi.string(),
+    name: Joi.string().required(),
+    userEmail: Joi.string().email().required(),
     message: Joi.string(),
 });
 

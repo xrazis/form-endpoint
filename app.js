@@ -26,6 +26,7 @@ app.get('/', (req, res) => {
 app.post('/send-email', cors(corsOptions), async (req, res) => {
     try {
         const {name, userEmail, message, fakeField, serverEmail} = req.body;
+        const host = req.hostname;
 
         //Check if a fake field is filled - naive bot detection :)
         if (fakeField !== null) {
@@ -39,7 +40,7 @@ app.post('/send-email', cors(corsOptions), async (req, res) => {
             from: email_user,
             replyTo: userEmail,
             to: serverEmail,
-            subject: `Source {ENTER_HOST} - inquiry from: ${name}`,
+            subject: `Email from ${host} - inquiry from: ${name}`,
             text: message
         };
 
