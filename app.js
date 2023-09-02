@@ -8,7 +8,7 @@ const {emailSchema} = require("./schemas/joi");
 const {email_user} = require("./config/dev");
 
 const corsOptions = {
-    origin: ['http://localhost:3000', 'https://antamacollective.gr'],
+    origin: ['http://localhost:3000', 'http://localhost:1313', 'https://antamacollective.gr'],
 }
 
 const app = express();
