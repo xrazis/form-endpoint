@@ -24,6 +24,10 @@ app.get('/', (req, res) => {
     res.send(`<b>form-endpoint</b> handles forms for SSG. Learn more on <a href="${githubRepo}">github.com/xrazis/form-endpoint</a>.`);
 });
 
+app.get('/send-email', cors(corsOptions), (req, res) => {
+    res.status(200).send('This route is only visible from CORS allowed origin.');
+});
+
 app.post('/send-email', cors(corsOptions), multer().none(), async (req, res) => {
     try {
         const {name, email, message, fakeField, serverEmail} = req.body;
