@@ -5,7 +5,6 @@ features include:
 
 - Rate limiting
 - CORS
-- Handles `Content-Type: multipart/form-data`
 - Joi schema validation for email
 
 # Run
