@@ -31,13 +31,8 @@ app.get('/send-email', cors(corsOptions), (req, res) => {
 
 app.post('/send-email', cors(corsOptions), async (req, res) => {
     try {
-        const {name, email, message, fakeField, serverEmail} = req.body;
+        const {name, email, message, serverEmail} = req.body;
         const host = req.hostname;
-
-        //Check if a fake field is filled - naive bot detection :)
-        if (fakeField !== undefined) {
-            throw new Error('Bot detected!');
-        }
 
         //Validate against our schema
         await emailSchema.validateAsync({name, email, message});
