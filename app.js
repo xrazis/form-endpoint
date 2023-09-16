@@ -46,7 +46,7 @@ app.post('/send-email', cors(corsOptions), multer().none(), async (req, res) => 
 
         transporter.sendMail(mail, (err, info) => {
             if (err) {
-                res.sendStatus(512).send(err);
+                res.send(err);
                 return;
             }
 
