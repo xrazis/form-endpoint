@@ -5,8 +5,8 @@ const multer = require('multer');
 
 const port = 3000;
 const transporter = require('./connections/mailer_conn');
-const {emailSchema} = require("./schemas/joi");
-const {email_user} = require("./config/dev");
+const {emailSchema} = require('./schemas/joi');
+const {email_user} = require('./config/dev');
 
 const corsOptions = {
     origin: ['https://antamacollective.gr'],
@@ -21,11 +21,11 @@ app.use(rateLimit({
 
 app.get('/', (req, res) => {
     const githubRepo = 'https://github.com/xrazis/form-endpoint';
-    res.send(`<b>form-endpoint</b> handles forms for SSG. Learn more on <a href="${githubRepo}">github.com/xrazis/form-endpoint</a>.`);
+    res.send(`<b>form-endpoint</b> handles forms for SSG. Learn more on <a href='${githubRepo}'>github.com/xrazis/form-endpoint</a>.`);
 });
 
 app.get('/send-email', cors(corsOptions), (req, res) => {
-    res.status(200).send('This route is only visible from CORS allowed origin.');
+    res.send('This route is only visible from CORS allowed origin.');
 });
 
 app.post('/send-email', cors(corsOptions), multer().none(), async (req, res) => {
@@ -46,14 +46,14 @@ app.post('/send-email', cors(corsOptions), multer().none(), async (req, res) => 
 
         transporter.sendMail(mail, (err, info) => {
             if (err) {
-                res.status(500).send(err);
+                res.sendStatus(500);
                 return;
             }
 
-            return res.status(200).send(info);
+            return res.sendStatus(200);
         });
     } catch (err) {
-        res.status(400).send(err);
+        res.sendStatus(400);
     }
 });
 
