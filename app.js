@@ -1,6 +1,7 @@
 const express = require('express');
 const rateLimit = require('express-rate-limit')
 const cors = require('cors');
+const multer = require('multer');
 
 const port = 3000;
 const transporter = require('./connections/mailer_conn');
@@ -12,8 +13,6 @@ const corsOptions = {
 }
 
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({extended: false}));
 
 app.use(rateLimit({
     windowMs: 60 * 1000,
@@ -29,7 +28,7 @@ app.get('/send-email', cors(corsOptions), (req, res) => {
     res.status(200).send('This route is only visible from CORS allowed origin.');
 });
 
-app.post('/send-email', cors(corsOptions), async (req, res) => {
+app.post('/send-email', cors(corsOptions), multer().none(), async (req, res) => {
     try {
         const {name, email, message, serverEmail} = req.body;
         const host = req.hostname;
