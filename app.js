@@ -44,13 +44,13 @@ app.post('/send-email', cors(corsOptions), multer().none(), async (req, res) => 
             text: message
         };
 
-        await transporter.sendMail(mail, (err, info) => {
+        transporter.sendMail(mail, (err, info) => {
             if (err) {
-                // return res.status(500);
-                console.log(err)
+                res.status(500).send(err);
+                return;
             }
-            console.log(info)
-            // return res.status(200);
+
+            return res.status(200).send(info);
         });
     } catch (err) {
         res.status(400).send(err);
